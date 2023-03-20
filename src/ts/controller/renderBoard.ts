@@ -13,7 +13,7 @@ export const renderBoard = (mat: string[][], selector: string) => {
     for (let j = 0; j < mat[0].length; j++) {
       var item = mat[i][j]
 
-      const className = `cell cell-${i}-${j}`
+      const className = `cell`
 
       const borderStyle =
         j < mat[0].length - 1
@@ -22,7 +22,7 @@ export const renderBoard = (mat: string[][], selector: string) => {
             : 'border-bottom'
           : ''
 
-      strHTML += `<td  class="${className} ${borderStyle}" >${item}</td>`
+      strHTML += `<td  class="${className} ${borderStyle}" id="${i}-${j}"  >${item}</td>`
     }
     strHTML += '</tr>'
   }
