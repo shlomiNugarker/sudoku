@@ -1,0 +1,39 @@
+#app {
+  .board {
+    background-color: lightgray;
+    table {
+      border: 5px solid #00000055;
+      border-radius: 5px;
+
+      tbody {
+        display: flex;
+        margin: 0;
+        padding: 0;
+        tr {
+          &.border-right {
+            border-right: 1px solid #0000009b;
+          }
+          &.border-right-bold {
+            border-right: 3px solid #0000009b;
+          }
+
+          td {
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+
+            &.border-bottom {
+              border-bottom: 1px solid #0000009b;
+            }
+            &.border-bottom-bold {
+              border-bottom: 3px solid #0000009b;
+            }
+          }
+        }
+      }
+    }
+  }
+}
