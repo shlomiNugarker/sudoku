@@ -1,5 +1,6 @@
 import { createBoard } from '../services/game'
 import { onCellClicked } from './onCellClicked'
+import onKeyUp from './onKeyUp'
 import onSetNumberInCell from './onSetNumberInCell'
 import { renderBoard } from './renderBoard'
 
@@ -19,13 +20,5 @@ export const onLoad = () => {
     })
   )
 
-  window.addEventListener('keyup', (ev) => {
-    console.log(ev.key)
-
-    const number = Number(ev.key)
-    if (Number.isInteger(number)) {
-      onSetNumberInCell(number.toString())
-    }
-    // ArrowLeft ArrowRight ArrowDown ArrowUp
-  })
+  window.addEventListener('keyup', onKeyUp)
 }
