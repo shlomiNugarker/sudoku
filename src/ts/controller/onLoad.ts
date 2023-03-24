@@ -13,8 +13,7 @@ export const onLoad = () => {
     cell.addEventListener('click', () => onCellClicked(cell))
   )
 
-  const numBtns = document.querySelectorAll('.num-btn')
-  numBtns.forEach((numBtn) =>
+  document.querySelectorAll('.num-btn').forEach((numBtn) =>
     numBtn.addEventListener('click', () => {
       onSetNumberInCell(numBtn.textContent || '')
     })

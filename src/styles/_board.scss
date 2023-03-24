@@ -11,36 +11,42 @@
         margin: 0;
         padding: 0;
         tr {
+          z-index: 0;
           &.border-right {
-            border-right: 1px solid #00000052;
+            border-right: 1px solid #8d8d8d;
           }
           &.border-right-bold {
-            border-right: 3px solid #0000009b;
+            border-right: 3px solid #00000066;
           }
 
           td {
+            z-index: 1;
             width: 50px;
             height: 50px;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            font-size: 24px;
+            font-size: 32px;
+
+            &.illegal {
+              color: red;
+            }
 
             &.affected {
-              background-color: #14635d39;
+              background-color: #e2ebf3;
             }
             &.border-bottom {
-              border-bottom: 1px solid #00000052;
+              border-bottom: 1px solid #8d8d8d;
             }
             &.border-bottom-bold {
-              border-bottom: 3px solid #0000009b;
+              border-bottom: 3px solid #00000066;
             }
-            &:hover {
-              background-color: #61614a30;
-            }
+            // &:hover {
+            //   background-color: #61614a30;
+            // }
             &.selected {
-              background-color: #0e3b373e;
+              background-color: #bbdefb;
             }
           }
         }

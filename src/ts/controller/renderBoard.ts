@@ -15,6 +15,8 @@ export const renderBoard = (mat: string[][], selector: string) => {
 
       const className = `cell`
 
+      const constantNumStyle = mat[i][j] ? 'constant' : ''
+
       const borderStyle =
         j < mat[0].length - 1
           ? j % 3 === 2
@@ -22,7 +24,7 @@ export const renderBoard = (mat: string[][], selector: string) => {
             : 'border-bottom'
           : ''
 
-      strHTML += `<td  class="${className} ${borderStyle}" id="${i}-${j}"  >${item}</td>`
+      strHTML += `<td  class="${className} ${borderStyle} ${constantNumStyle}" id="${i}-${j}"  >${item}</td>`
     }
     strHTML += '</tr>'
   }

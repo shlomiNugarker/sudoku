@@ -18,7 +18,6 @@ export default function onKeyUp(ev: KeyboardEvent) {
         onSetNumberInCell('')
       }
       break
-
     case 'ArrowLeft':
       {
         if (cellCoords.i < 1) return
@@ -55,7 +54,6 @@ export default function onKeyUp(ev: KeyboardEvent) {
         if (elTomove) onCellClicked(elTomove)
       }
       break
-
     default:
       break
   }
