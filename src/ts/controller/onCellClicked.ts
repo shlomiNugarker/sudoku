@@ -11,5 +11,5 @@ export function onCellClicked(cell: Element) {
   cell.classList.add('selected')
 
   cleanAffectedCells()
-  markAffectedCells()
+  markAffectedCells(cell)
 }
