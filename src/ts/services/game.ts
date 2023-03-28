@@ -26,10 +26,6 @@ const createBoard = (size: number) => {
   return globalState.board
 }
 
-// const isNumValid = (coord: Coord) => {
-//   console.log('isNumValid')
-// }
-
 const checkBoard = () => {
   let isBoardValid = true
   let invalidCoords: Coord[] = []
