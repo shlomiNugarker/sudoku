@@ -3,13 +3,18 @@
 }
 
 html {
-  font-family: roboto-light, sans-serif;
+  font-family: monospace;
   font-size: 14px;
 }
 
 body {
   margin: 0;
-  background-color: rgba(0, 27, 36, 0.371);
+  padding-top: 35px;
+  min-height: 100vh;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 html,
 body {
@@ -29,4 +34,10 @@ img {
 }
 p {
   margin: 0;
+}
+
+@media screen and (max-width: 600px) {
+  body {
+    background-color: lawngreen;
+  }
 }

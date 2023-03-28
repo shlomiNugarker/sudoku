@@ -1,7 +1,8 @@
 #app {
   .board {
-    background-color: lightgray;
+    // background-color: lightgray;
     border-radius: 5px;
+    margin: 5px;
     table {
       border: 5px solid #00000055;
       border-radius: 5px;
@@ -28,6 +29,8 @@
             justify-content: center;
             cursor: pointer;
             font-size: 32px;
+
+            color: #344861;
 
             &.red {
               color: red;
