@@ -1,5 +1,6 @@
+import { Coord } from '../../interfaces/coord'
 import { State } from '../../interfaces/state'
-import { getRandomInt } from './utils'
+import { getUniqueObjects } from './utils'
 
 export {
   createBoard,
@@ -10,6 +11,7 @@ export {
   getBoardSize,
   getSelectedCellVal,
   getAllAffectedCellCoords,
+  checkBoard,
 }
 
 const globalState: State = {
@@ -20,42 +22,66 @@ const globalState: State = {
 
 const createBoard = (size: number) => {
   const newBoard = buildBoard(size)
-  fillBoard(newBoard)
   globalState.board = newBoard
   return globalState.board
 }
 
-function isValid(num: string, i: number, j: number) {
-  // TODO: FUNC TO CHECK IF THE NUMBER IS LEGAL
-  return Math.random() > 0.5
-  return true
-}
+// const isNumValid = (coord: Coord) => {
+//   console.log('isNumValid')
+// }
 
-const fillBoard = (board: string[][]) => {
+const checkBoard = () => {
+  let isBoardValid = true
+  let invalidCoords: Coord[] = []
+
+  if (!globalState.board) return { isBoardValid, invalidCoords }
+
+  const { board } = globalState
+
   for (let i = 0; i < board.length; i++) {
-    for (let j = 0; j < board.length; j++) {
-      let num = getRandomInt(0, 9).toString()
-      while (isValid(num, i, j)) {
-        board[i][j] = num
+    for (let j = 0; j < board[0].length; j++) {
+      const CheckedNumbers: { [key: string]: boolean } = {}
+      const coord = { i, j }
+      const cellNum = board[i][j]
+      const coordsToCheck = getAllAffectedCellCoords(coord)
+
+      for (let k = 0; k < coordsToCheck.length; k++) {
+        const currCoordToCheck = coordsToCheck[k]
+        const cellNumberToCheck = board[currCoordToCheck.i][currCoordToCheck.j]
+
+        if (!cellNumberToCheck.length) continue
+
+        if (CheckedNumbers[cellNumberToCheck]) {
+          invalidCoords.push(currCoordToCheck)
+          if (isBoardValid) isBoardValid = false
+        } else if (
+          !CheckedNumbers[cellNumberToCheck] &&
+          cellNum === cellNumberToCheck
+        ) {
+          CheckedNumbers[cellNumberToCheck] = true
+        }
       }
     }
   }
 
-  return board
+  invalidCoords = getUniqueObjects(invalidCoords)
+
+  return { isBoardValid, invalidCoords }
 }
 
 const setSelectedCell = (cell: Element) => {
   globalState.selectedCell = cell
 }
 
-const getSelectedCellCoords = () => {
-  if (!globalState.selectedCell) return
-  return getCellCoords(globalState.selectedCell.id)
+const getSelectedCellCoords = (
+  cell: Element | null = globalState?.selectedCell
+) => {
+  if (!cell) return
+  return getCellCoords(cell.id)
 }
 
 const getSelectedCellVal = () => {
   if (!globalState.selectedCell) return null
-
   return globalState.selectedCell.textContent
 }
 
@@ -81,11 +107,9 @@ const getCellCoords = (cellId: string) => {
   return coord
 }
 
-function getAllAffectedCellCoords() {
-  const selectedCoord = getSelectedCellCoords()
-  if (!selectedCoord || !globalState.board) return
-  const { i, j } = selectedCoord
-  const coords: { i: number; j: number }[] = []
+function getAllAffectedCellCoords(coordToCeck: Coord) {
+  const { i, j } = coordToCeck
+  const coords: Coord[] = []
 
   //  The whole i axis
   for (let k = 0; k < 12; k++) {
@@ -105,8 +129,8 @@ function getAllAffectedCellCoords() {
     i: itl,
     j: jtl,
   }
-  //  all small squere coords:
-  const smallSquereCoords: { i: number; j: number }[] = [
+  // small squere coords (3x3):
+  const smallSquereCoords: Coord[] = [
     {
       i: topLeftCrood.i,
       j: topLeftCrood.j,
@@ -147,12 +171,12 @@ function getAllAffectedCellCoords() {
     },
   ]
 
-  // console.log([...coords, ...smallSquereCoords].length)
+  const all = getUniqueObjects([...coords, ...smallSquereCoords])
 
-  return [...coords, ...smallSquereCoords]
+  return all
 }
 
-const buildBoard = (size: number) => {
+const buildBoard = (size: number = 9) => {
   let board: string[][] = []
   for (let i = 0; i < size; i++) {
     board[i] = []
