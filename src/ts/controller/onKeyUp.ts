@@ -4,7 +4,7 @@ import onSetNumberInCell from './onSetNumberInCell'
 
 export default function onKeyUp(ev: KeyboardEvent) {
   const number = Number(ev.key)
-  if (Number.isInteger(number)) {
+  if (Number.isInteger(number) && number !== 0) {
     onSetNumberInCell(number.toString())
     return
   }
