@@ -61,3 +61,42 @@
     }
   }
 }
+
+@media screen and (max-width: 600px) {
+  #app {
+    .board {
+      table {
+        tbody {
+          tr {
+            z-index: 0;
+            &.border-right {
+            }
+            &.border-right-bold {
+            }
+
+            td {
+              width: 35px;
+              height: 35px;
+
+              &.similar {
+              }
+              &.constant {
+              }
+              &.red {
+              }
+              &.affected {
+              }
+              &.border-bottom {
+              }
+              &.border-bottom-bold {
+              }
+
+              &.selected {
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
