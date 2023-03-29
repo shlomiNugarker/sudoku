@@ -29,13 +29,17 @@
             justify-content: center;
             cursor: pointer;
             font-size: 32px;
+            color: #0072e3;
 
-            color: #344861;
-
+            &.similar {
+              background-color: #c3d7ea;
+            }
+            &.constant {
+              color: #344861;
+            }
             &.red {
               color: red;
             }
-
             &.affected {
               background-color: #e2ebf3;
             }
