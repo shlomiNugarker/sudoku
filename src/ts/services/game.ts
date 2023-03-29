@@ -25,9 +25,24 @@ const globalState: State = {
 
 const createBoard = () => {
   const newBoard = buildBoard()
-  globalState.board = newBoard
-  // solveSudoku()
+  const patialBoard = getPartialBoard(newBoard)
+  globalState.board = patialBoard
   return globalState.board
+}
+
+const getPartialBoard = (board: string[][]) => {
+  const solvedBoard = solveSudoku(JSON.parse(JSON.stringify(board)))
+  if (typeof solvedBoard === 'object') {
+    for (let i = 0; i < solvedBoard.length; i++) {
+      for (let j = 0; j < solvedBoard[0].length; j++) {
+        if (Math.random() > 0.2) {
+          solvedBoard[i][j] = ''
+        }
+      }
+    }
+    return solvedBoard
+  }
+  return null
 }
 
 const checkBoard = () => {
@@ -216,22 +231,21 @@ function isValidMove(board: string[][], emptyCoord: Coord, num: number) {
   return true
 }
 
-function solveSudoku() {
-  const { board } = globalState
+function solveSudoku(board: string[][]) {
   if (!board) return false
 
   const emptyCoord = findEmptyCoord(board)
 
   if (!emptyCoord) {
-    return true
+    return board
   }
 
   for (let num = 1; num <= 9; num++) {
     if (isValidMove(board, emptyCoord, num)) {
       board[emptyCoord.i][emptyCoord.j] = num.toString()
 
-      if (solveSudoku()) {
-        return true
+      if (solveSudoku(board)) {
+        return board
       }
       board[emptyCoord.i][emptyCoord.j] = ''
     }
