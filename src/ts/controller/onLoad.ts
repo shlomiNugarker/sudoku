@@ -5,7 +5,7 @@ import onSetNumberInCell from './onSetNumberInCell'
 import { renderBoard } from './renderBoard'
 
 export const onLoad = () => {
-  const board = createBoard(12)
+  const board = createBoard()
   board && renderBoard(board, '.board')
 
   const cells = document.querySelectorAll('.cell')
