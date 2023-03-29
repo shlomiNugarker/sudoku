@@ -12,6 +12,9 @@ export {
   getSelectedCellVal,
   getAllAffectedCellCoords,
   checkBoard,
+  getAllSimilarNumsCroods,
+  solveSudoku,
+  isValidMove,
 }
 
 const globalState: State = {
@@ -20,9 +23,10 @@ const globalState: State = {
   level: 1,
 }
 
-const createBoard = (size: number) => {
-  const newBoard = buildBoard(size)
+const createBoard = () => {
+  const newBoard = buildBoard()
   globalState.board = newBoard
+  // solveSudoku()
   return globalState.board
 }
 
@@ -43,30 +47,44 @@ const checkBoard = () => {
 
       for (let k = 0; k < coordsToCheck.length; k++) {
         const currCoordToCheck = coordsToCheck[k]
-        const cellNumberToCheck = board[currCoordToCheck.i][currCoordToCheck.j]
+        const effectedCellNum = board[currCoordToCheck.i][currCoordToCheck.j]
 
-        if (!cellNumberToCheck.length) continue
+        const isTheSameNum = cellNum === effectedCellNum
+        const isNumberExist = CheckedNumbers[effectedCellNum]
 
-        if (CheckedNumbers[cellNumberToCheck]) {
+        if (!effectedCellNum.length) continue
+
+        if (isNumberExist) {
           invalidCoords.push(currCoordToCheck)
           if (isBoardValid) isBoardValid = false
-        } else if (
-          !CheckedNumbers[cellNumberToCheck] &&
-          cellNum === cellNumberToCheck
-        ) {
-          CheckedNumbers[cellNumberToCheck] = true
+        } else if (!isNumberExist && isTheSameNum) {
+          CheckedNumbers[effectedCellNum] = true
         }
       }
     }
   }
-
   invalidCoords = getUniqueObjects(invalidCoords)
-
   return { isBoardValid, invalidCoords }
 }
 
 const setSelectedCell = (cell: Element) => {
   globalState.selectedCell = cell
+}
+
+const getAllSimilarNumsCroods = (selectedNum: string) => {
+  const { board } = globalState
+  if (!board) return
+  const coordsWithSimilarNums: Coord[] = []
+
+  for (let i = 0; i < board.length; i++) {
+    for (let j = 0; j < board.length; j++) {
+      if (board[i][j] === selectedNum) {
+        coordsWithSimilarNums.push({ i, j })
+      }
+    }
+  }
+
+  return coordsWithSimilarNums
 }
 
 const getSelectedCellCoords = (
@@ -108,12 +126,12 @@ function getAllAffectedCellCoords(coordToCeck: Coord) {
   const coords: Coord[] = []
 
   //  The whole i axis
-  for (let k = 0; k < 12; k++) {
+  for (let k = 0; k < 9; k++) {
     const coord = { i: i, j: k }
     coords.push(coord)
   }
   //  The whole j axis
-  for (let k = 0; k < 12; k++) {
+  for (let k = 0; k < 9; k++) {
     const coord = { i: k, j: j }
     coords.push(coord)
   }
@@ -182,4 +200,52 @@ const buildBoard = (size: number = 9) => {
     }
   }
   return board
+}
+
+function isValidMove(board: string[][], emptyCoord: Coord, num: number) {
+  const coordsToCheck = getAllAffectedCellCoords(emptyCoord)
+
+  for (let k = 0; k < coordsToCheck.length; k++) {
+    const coordToCheck = coordsToCheck[k]
+
+    if (board[coordToCheck.i][coordToCheck.j] === num.toString()) {
+      return false
+    }
+  }
+
+  return true
+}
+
+function solveSudoku() {
+  const { board } = globalState
+  if (!board) return false
+
+  const emptyCoord = findEmptyCoord(board)
+
+  if (!emptyCoord) {
+    return true
+  }
+
+  for (let num = 1; num <= 9; num++) {
+    if (isValidMove(board, emptyCoord, num)) {
+      board[emptyCoord.i][emptyCoord.j] = num.toString()
+
+      if (solveSudoku()) {
+        return true
+      }
+      board[emptyCoord.i][emptyCoord.j] = ''
+    }
+  }
+  return false
+}
+
+function findEmptyCoord(board: string[][]) {
+  for (let i = 0; i < board.length; i++) {
+    for (let j = 0; j < board.length; j++) {
+      if (board[i][j] === '') {
+        return { i, j }
+      }
+    }
+  }
+  return null
 }
