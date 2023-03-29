@@ -15,6 +15,8 @@ export {
   getAllSimilarNumsCroods,
   solveSudoku,
   isValidMove,
+  getBoard,
+  setBoard,
 }
 
 const globalState: State = {
@@ -28,6 +30,14 @@ const createBoard = () => {
   const patialBoard = getPartialBoard(newBoard)
   globalState.board = patialBoard
   return globalState.board
+}
+
+const getBoard = () => {
+  return globalState.board
+}
+
+const setBoard = (board: string[][]) => {
+  globalState.board = board
 }
 
 const getPartialBoard = (board: string[][]) => {
