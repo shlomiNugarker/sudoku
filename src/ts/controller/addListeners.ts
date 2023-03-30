@@ -1,5 +1,6 @@
 import { onCellClicked } from './onCellClicked'
 import onKeyUp from './onKeyUp'
+import onNewGame from './onNewGame'
 import onSetNumberInCell from './onSetNumberInCell'
 import onSolveBoard from './onSolveBoard'
 
@@ -18,6 +19,8 @@ export default function addListeners() {
   document
     .getElementById('solve-board-btn')
     ?.addEventListener('click', onSolveBoard)
+
+  document.getElementById('new-game-btn')?.addEventListener('click', onNewGame)
 
   window.addEventListener('keyup', onKeyUp)
 }
