@@ -1,5 +1,6 @@
 import { Coord } from '../../interfaces/coord'
 import { State } from '../../interfaces/state'
+import { load, store } from './storage'
 import { getUniqueObjects } from './utils'
 
 export {
@@ -17,18 +18,36 @@ export {
   isValidMove,
   getBoard,
   setBoard,
+  startNewGame,
+  getInitialBoard,
 }
 
-const globalState: State = {
-  board: null,
+const STORAGE_KEY = 'sudoku-state'
+
+let globalState: State = {
+  board: null, // the board on the game
+  initialBoard: null, // the initial board
   selectedCell: null,
   level: 1,
 }
 
 const createBoard = () => {
+  const myState: State = load(STORAGE_KEY)
+
+  if (myState && myState.board) {
+    globalState = myState
+    return globalState.board
+  } else {
+    return startNewGame()
+  }
+}
+
+const startNewGame = () => {
   const newBoard = buildBoard()
   const patialBoard = getPartialBoard(newBoard)
   globalState.board = patialBoard
+  globalState.initialBoard = patialBoard
+  store(STORAGE_KEY, globalState)
   return globalState.board
 }
 
@@ -38,6 +57,11 @@ const getBoard = () => {
 
 const setBoard = (board: string[][]) => {
   globalState.board = board
+  store(STORAGE_KEY, globalState)
+}
+
+const getInitialBoard = () => {
+  return globalState.initialBoard
 }
 
 const getPartialBoard = (board: string[][]) => {
@@ -135,6 +159,8 @@ const setNumberInMat = (num: string) => {
 
     globalState.board[cellPos.i][cellPos.j] = num
     const updatedCell = { ...cellPos, num }
+
+    store(STORAGE_KEY, globalState)
     return updatedCell
   }
   return null
@@ -161,7 +187,7 @@ function getAllAffectedCellCoords(coordToCeck: Coord) {
     coords.push(coord)
   }
 
-  //  Find the top-left corner of the small squere:
+  //  Find the top-left corner of the small(3x3) squere:
   const itl = Math.floor(i / 3) * 3
   const jtl = Math.floor(j / 3) * 3
   const topLeftCrood = {

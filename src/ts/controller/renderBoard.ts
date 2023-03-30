@@ -1,4 +1,8 @@
-export const renderBoard = (mat: string[][], selector: string) => {
+export const renderBoard = (
+  mat: string[][],
+  selector: string,
+  initialMat: string[][]
+) => {
   let strHTML = '<table border="0"><tbody>'
   for (let i = 0; i < mat.length; i++) {
     const borderStyle =
@@ -11,11 +15,11 @@ export const renderBoard = (mat: string[][], selector: string) => {
     strHTML += `<tr class="${borderStyle}">`
 
     for (let j = 0; j < mat[0].length; j++) {
-      var item = mat[i][j]
+      const item = mat[i][j]
 
       const className = `cell`
 
-      const constantNumStyle = mat[i][j] ? 'constant' : ''
+      const constantNumStyle = initialMat[i][j] ? 'constant' : ''
 
       const borderStyle =
         j < mat[0].length - 1
