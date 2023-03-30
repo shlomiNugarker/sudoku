@@ -3,35 +3,35 @@
   if (e && e.supports && e.supports('modulepreload')) return
   for (const n of document.querySelectorAll('link[rel="modulepreload"]')) r(n)
   new MutationObserver((n) => {
-    for (const l of n)
-      if (l.type === 'childList')
-        for (const c of l.addedNodes)
-          c.tagName === 'LINK' && c.rel === 'modulepreload' && r(c)
+    for (const s of n)
+      if (s.type === 'childList')
+        for (const l of s.addedNodes)
+          l.tagName === 'LINK' && l.rel === 'modulepreload' && r(l)
   }).observe(document, { childList: !0, subtree: !0 })
   function o(n) {
-    const l = {}
+    const s = {}
     return (
-      n.integrity && (l.integrity = n.integrity),
-      n.referrerPolicy && (l.referrerPolicy = n.referrerPolicy),
+      n.integrity && (s.integrity = n.integrity),
+      n.referrerPolicy && (s.referrerPolicy = n.referrerPolicy),
       n.crossOrigin === 'use-credentials'
-        ? (l.credentials = 'include')
+        ? (s.credentials = 'include')
         : n.crossOrigin === 'anonymous'
-        ? (l.credentials = 'omit')
-        : (l.credentials = 'same-origin'),
-      l
+        ? (s.credentials = 'omit')
+        : (s.credentials = 'same-origin'),
+      s
     )
   }
   function r(n) {
     if (n.ep) return
     n.ep = !0
-    const l = o(n)
-    fetch(n.href, l)
+    const s = o(n)
+    fetch(n.href, s)
   }
 })()
-function b(t, e) {
+function j(t, e) {
   localStorage[t] = JSON.stringify(e)
 }
-function $(t, e = null) {
+function A(t, e = null) {
   const o = localStorage[t] || e
   return JSON.parse(o)
 }
@@ -45,25 +45,27 @@ function E(t) {
     Object.values(e)
   )
 }
-const g = 'sudoku-state'
-let s = { board: null, initialBoard: null, selectedCell: null, level: 1 }
-const A = () => {
-    const t = $(g)
-    return t && t.board ? ((s = t), s.board) : L()
+const h = 'sudoku-state'
+let g = 0,
+  c = { board: null, initialBoard: null, selectedCell: null, level: 1 }
+const T = () => g,
+  I = () => {
+    const t = A(h)
+    return t && t.board ? ((c = t), c.board) : L()
   },
   L = () => {
-    const t = J(),
-      e = O(t)
-    return (s.board = e), (s.initialBoard = e), b(g, s), s.board
+    const t = x(),
+      e = q(t)
+    return (c.board = e), (c.initialBoard = e), j(h, c), (g = 0), c.board
   },
-  I = () => s.board,
+  O = () => c.board,
   w = (t) => {
-    ;(s.board = t), b(g, s)
+    ;(c.board = t), j(h, c)
   },
-  j = () => s.initialBoard,
-  O = (t) => {
-    const e = C(JSON.parse(JSON.stringify(t)))
-    if (typeof e == 'object') {
+  y = () => c.initialBoard,
+  q = (t) => {
+    const e = p(JSON.parse(JSON.stringify(t)))
+    if (((g = 0), typeof e == 'object')) {
       for (let o = 0; o < e.length; o++)
         for (let r = 0; r < e[0].length; r++)
           Math.random() > 0.2 && (e[o][r] = '')
@@ -71,58 +73,58 @@ const A = () => {
     }
     return null
   },
-  T = () => {
+  M = () => {
     let t = !0,
       e = []
-    if (!s.board) return { isBoardValid: t, invalidCoords: e }
-    const { board: o } = s
+    if (!c.board) return { isBoardValid: t, invalidCoords: e }
+    const { board: o } = c
     for (let r = 0; r < o.length; r++)
       for (let n = 0; n < o[0].length; n++) {
-        const l = {},
-          c = { i: r, j: n },
+        const s = {},
+          l = { i: r, j: n },
           d = o[r][n],
-          f = y(c)
+          f = C(l)
         for (let i = 0; i < f.length; i++) {
           const a = f[i],
             u = o[a.i][a.j],
-            N = d === u,
-            S = l[u]
-          u.length && (S ? (e.push(a), t && (t = !1)) : !S && N && (l[u] = !0))
+            $ = d === u,
+            B = s[u]
+          u.length && (B ? (e.push(a), t && (t = !1)) : !B && $ && (s[u] = !0))
         }
       }
     return (e = E(e)), { isBoardValid: t, invalidCoords: e }
   },
-  q = (t) => {
-    s.selectedCell = t
+  P = (t) => {
+    c.selectedCell = t
   },
-  M = (t) => {
-    const { board: e } = s
+  J = (t) => {
+    const { board: e } = c
     if (!e) return
     const o = []
     for (let r = 0; r < e.length; r++)
       for (let n = 0; n < e.length; n++) e[r][n] === t && o.push({ i: r, j: n })
     return o
   },
-  v = (t = s == null ? void 0 : s.selectedCell) => {
-    if (t) return k(t.id)
+  k = (t = c == null ? void 0 : c.selectedCell) => {
+    if (t) return N(t.id)
   },
-  P = (t) => {
+  U = (t) => {
     var e
-    if ((e = s.selectedCell) != null && e.classList.contains('constant'))
+    if ((e = c.selectedCell) != null && e.classList.contains('constant'))
       return null
-    if (s.selectedCell && s.board) {
-      const o = k(s.selectedCell.id)
-      s.board[o.i][o.j] = t
+    if (c.selectedCell && c.board) {
+      const o = N(c.selectedCell.id)
+      c.board[o.i][o.j] = t
       const r = { ...o, num: t }
-      return b(g, s), r
+      return j(h, c), r
     }
     return null
   },
-  k = (t) => {
+  N = (t) => {
     const e = t.split('-')
     return { i: +e[0], j: +e[1] }
   }
-function y(t) {
+function C(t) {
   const { i: e, j: o } = t,
     r = []
   for (let i = 0; i < 9; i++) {
@@ -134,22 +136,22 @@ function y(t) {
     r.push(a)
   }
   const n = Math.floor(e / 3) * 3,
-    l = Math.floor(o / 3) * 3,
-    c = { i: n, j: l },
+    s = Math.floor(o / 3) * 3,
+    l = { i: n, j: s },
     d = [
-      { i: c.i, j: c.j },
-      { i: c.i + 1, j: c.j },
-      { i: c.i + 2, j: c.j },
-      { i: c.i, j: c.j + 1 },
-      { i: c.i + 1, j: c.j + 1 },
-      { i: c.i + 2, j: c.j + 1 },
-      { i: c.i, j: c.j + 2 },
-      { i: c.i + 1, j: c.j + 2 },
-      { i: c.i + 2, j: c.j + 2 },
+      { i: l.i, j: l.j },
+      { i: l.i + 1, j: l.j },
+      { i: l.i + 2, j: l.j },
+      { i: l.i, j: l.j + 1 },
+      { i: l.i + 1, j: l.j + 1 },
+      { i: l.i + 2, j: l.j + 1 },
+      { i: l.i, j: l.j + 2 },
+      { i: l.i + 1, j: l.j + 2 },
+      { i: l.i + 2, j: l.j + 2 },
     ]
   return E([...r, ...d])
 }
-const J = (t = 9) => {
+const x = (t = 9) => {
   let e = []
   for (let o = 0; o < t; o++) {
     e[o] = []
@@ -160,43 +162,43 @@ const J = (t = 9) => {
   }
   return e
 }
-function U(t, e, o) {
-  const r = y(e)
+function G(t, e, o) {
+  const r = C(e)
   for (let n = 0; n < r.length; n++) {
-    const l = r[n]
-    if (t[l.i][l.j] === o.toString()) return !1
+    const s = r[n]
+    if (t[s.i][s.j] === o.toString()) return !1
   }
   return !0
 }
-function C(t) {
-  if (!t) return !1
-  const e = x(t)
+function p(t) {
+  if ((++g, g > 5e3 || !t)) return !1
+  const e = H(t)
   if (!e) return t
   for (let o = 1; o <= 9; o++)
-    if (U(t, e, o)) {
-      if (((t[e.i][e.j] = o.toString()), C(t))) return t
+    if (G(t, e, o)) {
+      if (((t[e.i][e.j] = o.toString()), p(t))) return t
       t[e.i][e.j] = ''
     }
   return !1
 }
-function x(t) {
+function H(t) {
   for (let e = 0; e < t.length; e++)
     for (let o = 0; o < t.length; o++) if (t[e][o] === '') return { i: e, j: o }
   return null
 }
-function G(t) {
+function K(t) {
   var o
-  const e = v(t)
+  const e = k(t)
   e &&
-    ((o = y(e)) == null ||
+    ((o = C(e)) == null ||
       o.forEach(({ i: r, j: n }) => {
-        const l = document.getElementById(`${r}-${n}`)
-        ;(l != null && l.classList.contains('affected')) ||
-          l == null ||
-          l.classList.add('affected')
+        const s = document.getElementById(`${r}-${n}`)
+        ;(s != null && s.classList.contains('affected')) ||
+          s == null ||
+          s.classList.add('affected')
       }))
 }
-function H(t) {
+function V(t) {
   var o
   if (
     (document
@@ -205,7 +207,7 @@ function H(t) {
     !((o = t.textContent) != null && o.length))
   )
     return
-  const e = M(t.textContent)
+  const e = J(t.textContent)
   e &&
     e.forEach((r) => {
       var n
@@ -217,44 +219,44 @@ function m(t) {
   document
     .querySelectorAll('.selected')
     .forEach((e) => e.classList.remove('selected')),
-    q(t),
+    P(t),
     t.classList.add('selected'),
     document
       .querySelectorAll('.affected')
       .forEach((e) => e.classList.remove('affected')),
-    G(t),
-    H(t)
+    K(t),
+    V(t)
 }
-function K(t) {
+function R(t) {
   t.forEach((e) => {
     var o
     ;(o = document.getElementById(`${e.i}-${e.j}`)) == null ||
       o.classList.add('red')
   })
 }
-function V(t) {
+function D(t) {
   if (!t) return
   const e = document.getElementById(`${t.i}-${t.j}`)
   e && (e.innerHTML = t.num)
 }
-function h(t) {
-  const e = P(t)
-  V(e)
-  const { isBoardValid: o, invalidCoords: r } = T()
+function b(t) {
+  const e = U(t)
+  D(e)
+  const { isBoardValid: o, invalidCoords: r } = M()
   document.querySelectorAll('.red').forEach((n) => n.classList.remove('red')),
-    o || K(r)
+    o || R(r)
 }
-function R(t) {
+function F(t) {
   const e = Number(t.key)
   if (Number.isInteger(e) && e !== 0) {
-    h(e.toString())
+    b(e.toString())
     return
   }
-  const o = v()
+  const o = k()
   if (o)
     switch (t.key) {
       case 'Backspace':
-        h('')
+        b('')
         break
       case 'ArrowLeft':
         {
@@ -286,27 +288,27 @@ function R(t) {
         break
     }
 }
-const p = (t, e, o) => {
+const S = (t, e, o) => {
   let r = '<table border="0"><tbody>'
-  for (let l = 0; l < t.length; l++) {
-    const c =
-      l < t.length - 1
-        ? l % 3 === 2
+  for (let s = 0; s < t.length; s++) {
+    const l =
+      s < t.length - 1
+        ? s % 3 === 2
           ? 'border-right-bold'
           : 'border-right'
         : ''
-    r += `<tr class="${c}">`
+    r += `<tr class="${l}">`
     for (let d = 0; d < t[0].length; d++) {
-      const f = t[l][d],
+      const f = t[s][d],
         i = 'cell',
-        a = o[l][d] ? 'constant' : '',
+        a = o[s][d] ? 'constant' : '',
         u =
           d < t[0].length - 1
             ? d % 3 === 2
               ? 'border-bottom-bold'
               : 'border-bottom'
             : ''
-      r += `<td  class="${i} ${u} ${a}" id="${l}-${d}"  >${f}</td>`
+      r += `<td  class="${i} ${u} ${a}" id="${s}-${d}"  >${f}</td>`
     }
     r += '</tr>'
   }
@@ -314,40 +316,41 @@ const p = (t, e, o) => {
   const n = document.querySelector(e)
   n && (n.innerHTML = r)
 }
-function D() {
+function W() {
   const t = L(),
-    e = j()
-  t && e && p(t, '.board', e), B()
+    e = y()
+  console.log({ board: t, initialBoard: e }), t && e && S(t, '.board', e), v()
 }
-function F() {
-  const t = I()
+function Y() {
+  const t = O()
   if (!t) return
-  const e = C(t)
+  const e = p(t),
+    o = T()
   if (e) {
-    w(e)
-    const o = j()
-    e && o && p(e, '.board', o), B()
-  }
+    alert(o + ' moves to solve the sudoku!'), w(e)
+    const r = y()
+    e && r && S(e, '.board', r), v()
+  } else alert(o + " tries... Coudn't solve the sudoku")
 }
-function B() {
+function v() {
   var e, o
   document
     .querySelectorAll('.cell')
     .forEach((r) => r.addEventListener('click', () => m(r))),
     document.querySelectorAll('.num-btn').forEach((r) =>
       r.addEventListener('click', () => {
-        h(r.textContent || '')
+        b(r.textContent || '')
       })
     ),
     (e = document.getElementById('solve-board-btn')) == null ||
-      e.addEventListener('click', F),
+      e.addEventListener('click', Y),
     (o = document.getElementById('new-game-btn')) == null ||
-      o.addEventListener('click', D),
-    window.addEventListener('keyup', R)
+      o.addEventListener('click', W),
+    window.addEventListener('keyup', F)
 }
-const W = () => {
-  const t = A(),
-    e = j()
-  t && e && p(t, '.board', e), B()
+const _ = () => {
+  const t = I(),
+    e = y()
+  t && e && S(t, '.board', e), v()
 }
-window.addEventListener('load', W)
+window.addEventListener('load', _)

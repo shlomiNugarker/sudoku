@@ -20,9 +20,12 @@ export {
   setBoard,
   startNewGame,
   getInitialBoard,
+  getNumOfTriesToSolve,
 }
 
 const STORAGE_KEY = 'sudoku-state'
+
+let triesTosolve = 0
 
 let globalState: State = {
   board: null, // the board on the game
@@ -31,9 +34,12 @@ let globalState: State = {
   level: 1,
 }
 
+const getNumOfTriesToSolve = () => {
+  return triesTosolve
+}
+
 const createBoard = () => {
   const myState: State = load(STORAGE_KEY)
-
   if (myState && myState.board) {
     globalState = myState
     return globalState.board
@@ -48,6 +54,8 @@ const startNewGame = () => {
   globalState.board = patialBoard
   globalState.initialBoard = patialBoard
   store(STORAGE_KEY, globalState)
+  triesTosolve = 0
+
   return globalState.board
 }
 
@@ -66,6 +74,7 @@ const getInitialBoard = () => {
 
 const getPartialBoard = (board: string[][]) => {
   const solvedBoard = solveSudoku(JSON.parse(JSON.stringify(board)))
+  triesTosolve = 0
   if (typeof solvedBoard === 'object') {
     for (let i = 0; i < solvedBoard.length; i++) {
       for (let j = 0; j < solvedBoard[0].length; j++) {
@@ -132,7 +141,6 @@ const getAllSimilarNumsCroods = (selectedNum: string) => {
       }
     }
   }
-
   return coordsWithSimilarNums
 }
 
@@ -236,7 +244,7 @@ function getAllAffectedCellCoords(coordToCeck: Coord) {
     },
   ]
 
-  const all = getUniqueObjects([...coords, ...smallSquereCoords])
+  const all = getUniqueObjects([...coords, ...smallSquereCoords]) // Set ??
 
   return all
 }
@@ -268,6 +276,12 @@ function isValidMove(board: string[][], emptyCoord: Coord, num: number) {
 }
 
 function solveSudoku(board: string[][]) {
+  ++triesTosolve
+
+  if (triesTosolve > 5000) {
+    return false
+  }
+
   if (!board) return false
 
   const emptyCoord = findEmptyCoord(board)
