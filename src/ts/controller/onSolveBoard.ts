@@ -1,4 +1,9 @@
-import { getBoard, setBoard, solveSudoku } from '../services/game'
+import {
+  getBoard,
+  getInitialBoard,
+  setBoard,
+  solveSudoku,
+} from '../services/game'
 import addListeners from './addListeners'
 import { renderBoard } from './renderBoard'
 
@@ -8,7 +13,11 @@ export default function onSolveBoard() {
   const solvedBoard = solveSudoku(currBoard)
   if (solvedBoard) {
     setBoard(solvedBoard)
-    renderBoard(solvedBoard, '.board')
+
+    const initialBoard = getInitialBoard()
+    solvedBoard &&
+      initialBoard &&
+      renderBoard(solvedBoard, '.board', initialBoard)
     addListeners()
   }
 }
